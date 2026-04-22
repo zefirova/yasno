@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Майский календарь ресурса</title>
+  <style>
+    :root {
+      --bg: #f3f5f7;
+      --card: #ffffff;
+      --text: #162332;
+      --muted: #5f6b7a;
+      --accent: #45aaf2;
+      --accent-dark: #1d7fcc;
+      --line: #dbe4ec;
+      --shadow: 0 10px 30px rgba(22, 35, 50, 0.08);
+      --radius: 24px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #f5f7fa 0%, #edf3f8 100%);
+      color: var(--text);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(245, 247, 250, 0.82);
+      border-bottom: 1px solid rgba(219, 228, 236, 0.9);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #7bc3ff);
+      color: white;
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav a {
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      background: #e7f3fd;
+      color: var(--accent-dark);
+    }
+
+    .hero {
+      padding: 56px 0 28px;
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at top left, #e7f5ff 0%, #ffffff 42%), var(--card);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      padding: 42px;
+      display: grid;
+      grid-template-columns: 1.3fr 0.8fr;
+      gap: 28px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #e7f3fd;
+      color: var(--accent-dark);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    h1, h2, h3 { margin: 0; letter-spacing: -0.04em; }
+
+    h1 {
+      font-size: clamp(36px, 5vw, 64px);
+      line-height: 0.96;
+      max-width: 12ch;
+      margin-bottom: 18px;
+    }
+
+    .lead {
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 58ch;
+      margin-bottom: 24px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 10px 24px rgba(69, 170, 242, 0.26);
+    }
+
+    .button.primary:hover { background: var(--accent-dark); }
+
+    .button.secondary {
+      background: white;
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .hero-side {
+      align-self: stretch;
+      display: grid;
+      gap: 14px;
+    }
+
+    .mini-card {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(219, 228, 236, 0.9);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .mini-card strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 15px;
+    }
+
+    .section {
+      padding: 24px 0 8px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section-head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 70ch;
+      line-height: 1.55;
+    }
+
+    .chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0 26px;
+    }
+
+    .chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: #e7f3fd;
+      color: var(--accent-dark);
+      border-color: #cde7fb;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .day-card {
+      background: var(--card);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(219, 228, 236, 0.75);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 210px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      cursor: pointer;
+    }
+
+    .day-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 34px rgba(22, 35, 50, 0.12);
+    }
+
+    .day-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .date-pill {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent-dark);
+      background: #e7f3fd;
+      border-radius: 999px;
+      padding: 8px 10px;
+    }
+    .gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+}
+    .tag {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .day-card h3 {
+      font-size: 24px;
+      line-height: 1.05;
+    }
+
+    .day-card p {
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .day-footer {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--accent-dark);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .viewer-wrap {
+      padding: 34px 0 72px;
+    }
+
+    .viewer {
+      display: grid;
+      grid-template-columns: 0.95fr 1.15fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--card);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(219, 228, 236, 0.8);
+      overflow: hidden;
+    }
+
+    .panel-cover {
+      aspect-ratio: 4 / 5;
+      background: linear-gradient(135deg, #0f2030 0%, #18314c 100%);
+      color: white;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .panel-cover-inner {
+      width: 100%;
+      height: 100%;
+      border: 2px solid rgba(123, 195, 255, 0.24);
+      border-radius: 28px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .panel-cover small {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      background: rgba(69, 170, 242, 0.22);
+      color: #b8e2ff;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .panel-cover h2 {
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 0.98;
+      max-width: 10ch;
+    }
+
+    .panel-body {
+      padding: 26px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #f4f8fc;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .viewer h2 {
+      font-size: clamp(30px, 4vw, 52px);
+      line-height: 0.96;
+      margin-bottom: 16px;
+    }
+
+    .intro {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.65;
+      margin-bottom: 22px;
+    }
+
+    .list-box {
+      background: #f7fafc;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .list-box h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .list-box ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .gallery figure {
+      margin: 0;
+      background: #f7fafc;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .gallery .placeholder {
+      min-height: 200px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-weight: 700;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .links-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .footer-note {
+      padding: 10px 0 60px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 1100px) {
+      .calendar-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .viewer,
+      .hero-card { grid-template-columns: 1fr; }
+      .panel-cover { aspect-ratio: 16 / 9; }
+    }
+
+    @media (max-width: 760px) {
+      .container { width: min(var(--max), calc(100% - 20px)); }
+      .topbar-inner { align-items: start; flex-direction: column; }
+      .hero-card,
+      .panel-body { padding: 22px; }
+      .calendar-grid,
+      .gallery { grid-template-columns: 1fr; }
+      .day-card { min-height: 180px; }
+      h1 { max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <div class="brand-badge">✦</div>
+        <div>
+          <div>Майский календарь ресурса</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#calendar" class="active">Все даты</a>
+        <a href="#calendar" data-filter="prep">Подготовка</a>
+        <a href="#calendar" data-filter="rest">Отдых</a>
+        <a href="#calendar" data-filter="return">Возвращение</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="section" id="calendar">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Календарь материалов</h2> 
+          </div>
+        </div>
+
+
+
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+    </section>
+
+    <section class="viewer-wrap" id="day-viewer">
+      <div class="container viewer">
+        <article class="panel" id="coverPanel">
+          <div class="panel-cover">
+            <div class="panel-cover-inner">
+              <div>
+                <small id="coverEyebrow">#чеклист</small>
+                <h2 id="coverTitle">Подготовка к выходным для быстрой адаптации к работе</h2>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-body">
+            <div class="meta" id="meta"></div>
+            <p class="intro" id="intro"></p>
+            <div id="contentBlocks"></div>
+            <div class="links-row">
+              <a href="#calendar" class="button secondary">Вернуться к календарю</a>
+              <button class="button primary" id="nextDayButton" type="button">Следующий день</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="container footer-note">
+    MVP-шаблон для GitHub Pages. В проде можно вынести данные в content.json и подключить реальные изображения из папок по датам.
+  </div>
+
+  <script>
+    const days = [
+      {
+        id: '2024-04-28',
+        dateLabel: '28 апреля',
+        shortTitle: 'Подготовка к выходным',
+        title: 'Почему так сложно вливаться в работу после праздничных выходных?',
+        eyebrow: '#чеклист',
+        theme: 'prep',
+        format: 'Чек-лист',
+        teaser: 'Практический материал о том, как заранее снизить стресс от возвращения к работе после длинных выходных.',
+        intro: 'Потому что обычно мы к ним не готовимся — только очень ждем, чтобы скорее отложить дела. А по возвращении сталкиваемся с интенсивным стрессом. Делимся чек-листом, с которым вам будет проще вернуться к работе после праздничных выходных. Позаботьтесь о себе сейчас, чтобы снизить стресс, когда вернетесь к работе.',
+        bullets: [],
+        gallery: [
+        { src: './01.png' },
+        { src: './02.png' },
+        { src: './03.png' },
+        { src: './04.png' }
+        ]
+      },
+      {
+        id: '2024-04-29',
+        dateLabel: '29 апреля',
+        shortTitle: 'Как отдыхать',
+        title: 'Сложно отдохнуть, даже если для этого есть больше времени?',
+        eyebrow: '#отдых',
+        theme: 'rest',
+        format: 'Мини-статья',
+        teaser: 'Подборка практик и наблюдений о качественном отдыхе: что действительно восстанавливает, а что нет.',
+        intro: 'Длинные выходные не всегда автоматически означают хороший отдых. Иногда свободного времени становится больше, а восстановиться всё равно не получается. Здесь можно собрать текстовую версию карточек и короткие практические рекомендации.',
+        bullets: [
+          { title: 'Смысловые блоки', items: ['Как проверить, что отдыха действительно хватило.', 'Какие занятия помогают восстановиться.', 'Почему мы не замечаем отдых.', 'Что убрать из «анти-списка» дел.', 'Как собрать собственную «коробочку отдыха».'] }
+        ],
+        gallery: [{ type: 'placeholder', label: 'Карточки из папки 29 апреля' }]
+      },
+      {
+        id: '2024-04-30',
+        dateLabel: '30 апреля',
+        shortTitle: 'Когда сложно даже думать об отдыхе',
+        title: 'Было тяжело даже подумать об отдыхе?',
+        eyebrow: '#поддержка',
+        theme: 'rest',
+        format: 'Напоминание',
+        teaser: 'Короткий поддерживающий материал и мягкий переход к помощи специалиста.',
+        intro: 'Если отдых вызывает напряжение, вину или ощущение, что вы не умеете переключаться, это не обязательно «ваша лень». Иногда такие реакции связаны с более глубокими причинами, и их можно обсуждать со специалистом.',
+        bullets: [
+          { title: 'Блок на странице', items: ['Короткое нормализующее объяснение.', 'Поддерживающий текст без давления.', 'Мягкий CTA к сервису помощи.'] }
+        ],
+        gallery: [{ type: 'placeholder', label: 'Материалы из папки 30 апреля' }]
+      },
+      {
+        id: '2024-05-04',
+        dateLabel: '4 мая',
+        shortTitle: 'Как перестать жить в ожидании',
+        title: 'Как перестать жить в ожидании выходных, отпуска и конца рабочего дня?',
+        eyebrow: '#рефлексия',
+        theme: 'rest',
+        format: 'Карточки',
+        teaser: 'Рефлексивный материал о том, как не проживать неделю в режиме «дотерпеть до пятницы».',
+        intro: 'Ждать с нетерпением выходных — нормально. Но если вся жизнь начинает сжиматься до ожидания коротких передышек, это хороший повод заметить, как устроены будни и где в них не хватает жизни.',
+        bullets: [{ title: 'Можно раскрыть', items: ['Как заметить режим ожидания.', 'Почему недели пролетают незамеченными.', 'Какие вопросы можно задать себе.', 'Как бережно прийти к терапии.'] }],
+        gallery: [{ type: 'placeholder', label: 'Карточки из папки 4 мая' }]
+      },
+      {
+        id: '2024-05-05',
+        dateLabel: '5 мая',
+        shortTitle: 'Всегда ждёте выходных?',
+        title: 'Заметили, что всегда с нетерпением ждёте выходных?',
+        eyebrow: '#самопроверка',
+        theme: 'rest',
+        format: 'Короткий пост',
+        teaser: 'Диагностический материал о том, что может скрываться за постоянным ожиданием конца рабочей недели.',
+        intro: 'Если будни не оставляют места важным для вас делам или вызывают устойчивое отторжение, это может быть сигналом, что текущий ритм жизни устроен слишком тяжело. Такой текст хорошо работает как лаконичное напоминание.',
+        bullets: [{ title: 'На странице', items: ['2–3 коротких абзаца.', 'Нормализация чувств.', 'Мягкий CTA к разговору со специалистом.'] }],
+        gallery: [{ type: 'placeholder', label: 'Материалы из папки 5 мая' }]
+      },
+      {
+        id: '2024-05-12',
+        dateLabel: '12 мая',
+        shortTitle: 'Воскресная тоска',
+        title: 'Почему в последний день выходных мне тоскливо и тревожно?',
+        eyebrow: '#возвращение',
+        theme: 'return',
+        format: 'Объясняющий материал',
+        teaser: 'Что такое воскресная тоска и почему она может проявляться после длинных выходных или отпуска.',
+        intro: 'Так называемая воскресная тоска может появляться не только в воскресенье. После отпуска и длинных выходных она тоже нередко возвращается — как смесь грусти, тревоги и сопротивления новому рабочему циклу.',
+        bullets: [{ title: 'Ключевые блоки', items: ['Что это за состояние.', 'Почему оно возникает.', 'Когда стоит обратить внимание глубже.', 'Какой поддерживающий CTA добавить.'] }],
+        gallery: [{ type: 'placeholder', label: 'Карточки из папки 12 мая' }]
+      },
+      {
+        id: '2024-05-13',
+        dateLabel: '13 мая',
+        shortTitle: 'Что помогает войти в ритм',
+        title: 'Что помогает и не помогает войти в привычный ритм после праздников?',
+        eyebrow: '#чеклист',
+        theme: 'return',
+        format: 'Чек-лист',
+        teaser: 'Материал для самопроверки: полезные и неполезные способы адаптации после длинных выходных.',
+        intro: 'Хороший формат для страницы дня — короткий чек-лист, который можно сохранить и вернуть к нему позже. Особенно полезно после отпуска, каникул и длинных праздничных периодов.',
+        bullets: [{ title: 'Структура', items: ['Что обычно помогает.', 'Что только усиливает стресс.', 'Короткое завершающее напоминание.', 'Ссылка на специалиста как опция.'] }],
+        gallery: [{ type: 'placeholder', label: 'Материалы из папки 13 мая' }]
+      },
+      {
+        id: '2024-05-14',
+        dateLabel: '14 мая',
+        shortTitle: '4 способа влиться в работу',
+        title: 'Практические действия, которые помогут влиться в работу после выходных',
+        eyebrow: '#практика',
+        theme: 'return',
+        format: 'Карточки',
+        teaser: 'Набор конкретных действий для мягкого возвращения в рабочий режим.',
+        intro: 'Здесь удобно показать несколько простых шагов, к которым можно возвращаться после любого длительного отдыха: отпуска, праздников или новогодних каникул.',
+        bullets: [{ title: 'Можно дать', items: ['Минимальный план на первый день.', 'Упрощение ожиданий к себе.', 'Переход от тревоги к действию.', 'Напоминание про ресурсный ритм.'] }],
+        gallery: [{ type: 'placeholder', label: 'Карточки из папки 14 мая' }]
+      },
+      {
+        id: '2024-05-15',
+        dateLabel: '15 мая',
+        shortTitle: 'Как не жить от выходных до выходных',
+        title: 'Дружеское напоминание: как проводить рабочие дни так, чтобы не приходилось ждать отпуска',
+        eyebrow: '#напоминание',
+        theme: 'return',
+        format: 'Финальный день',
+        teaser: 'Финальное мягкое напоминание о привычках, которые сохраняют ресурс в будни.',
+        intro: 'Финальную страницу можно оформить как дружеское завершение спецпроекта: без назидания, с акцентом на маленькие привычки, которые делают обычную неделю более выносимой и живой.',
+        bullets: [{ title: 'Подходит для финала', items: ['Короткие ресурсные привычки.', 'Поддерживающий тон.', 'CTA к психологу не как обязанность, а как возможность.'] }],
+        gallery: [{ type: 'placeholder', label: 'Материалы из папки 15 мая' }]
+      }
+    ];
+
+    const grid = document.getElementById('calendarGrid');
+    const chips = document.querySelectorAll('.chip');
+    const navLinks = document.querySelectorAll('.nav a[data-filter]');
+    const meta = document.getElementById('meta');
+    const intro = document.getElementById('intro');
+    const contentBlocks = document.getElementById('contentBlocks');
+    const coverTitle = document.getElementById('coverTitle');
+    const coverEyebrow = document.getElementById('coverEyebrow');
+    const nextDayButton = document.getElementById('nextDayButton');
+
+    let currentFilter = 'all';
+    let currentIndex = 0;
+
+    function getVisibleDays() {
+      return currentFilter === 'all' ? days : days.filter(day => day.theme === currentFilter);
+    }
+
+    function renderGrid() {
+      const visibleDays = getVisibleDays();
+      grid.innerHTML = visibleDays.map((day, index) => `
+        <article class="day-card" data-id="${day.id}" data-index="${index}">
+          <div class="day-top">
+            <span class="date-pill">${day.dateLabel}</span>
+            <span class="tag">${day.format}</span>
+          </div>
+          <h3>${day.shortTitle}</h3>
+          <p>${day.teaser}</p>
+          <div class="day-footer">
+            <span>${themeLabel(day.theme)}</span>
+            <span>Открыть →</span>
+          </div>
+        </article>
+      `).join('');
+
+      grid.querySelectorAll('.day-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const id = card.dataset.id;
+          const visible = getVisibleDays();
+          const idx = visible.findIndex(item => item.id === id);
+          renderDay(visible[idx]);
+          currentIndex = idx;
+          document.getElementById('day-viewer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+
+    function renderDay(day) {
+      intro.textContent = day.intro;
+      coverTitle.textContent = day.title;
+      coverEyebrow.textContent = day.eyebrow;
+      meta.innerHTML = `
+        <span>${day.dateLabel}</span>
+        <span>${day.format}</span>
+        <span>${themeLabel(day.theme)}</span>
+      `;
+
+      contentBlocks.innerHTML = '';
+
+      day.bullets.forEach(block => {
+        const el = document.createElement('section');
+        el.className = 'list-box';
+        el.innerHTML = `
+          <h3>${block.title}</h3>
+          <ul>
+            ${block.items.map(item => `<li>${item}</li>`).join('')}
+          </ul>
+        `;
+        contentBlocks.appendChild(el);
+      });
+
+      const gallery = document.createElement('section');
+      gallery.className = 'gallery';
+      gallery.innerHTML = day.gallery.map(item => `
+        <figure>
+          <img src="${item.src}" alt="" />
+        </figure>
+      `).join('');
+      contentBlocks.appendChild(gallery);
+    }
+
+    function themeLabel(theme) {
+      return {
+        prep: 'Подготовка',
+        rest: 'Отдых',
+        return: 'Возвращение'
+      }[theme] || theme;
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      chips.forEach(chip => chip.classList.toggle('active', chip.dataset.filter === filter));
+      navLinks.forEach(link => link.classList.toggle('active', link.dataset.filter === filter));
+      renderGrid();
+      const firstDay = getVisibleDays()[0];
+      if (firstDay) {
+        currentIndex = 0;
+        renderDay(firstDay);
+      }
+    }
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => setFilter(chip.dataset.filter));
+    });
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => setFilter(link.dataset.filter));
+    });
+
+    nextDayButton.addEventListener('click', () => {
+      const visible = getVisibleDays();
+      currentIndex = (currentIndex + 1) % visible.length;
+      renderDay(visible[currentIndex]);
+      document.getElementById('day-viewer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    renderGrid();
+    renderDay(days[0]);
+  </script>
+</body>
+</html>
