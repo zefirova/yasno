@@ -239,7 +239,12 @@
       font-weight: 700;
       cursor: pointer;
     }
-
+.card-note {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+  opacity: 0.8;
+}
     .chip.active {
       background: #e7f3fd;
       color: var(--accent-dark);
@@ -281,7 +286,20 @@
   width: 220px;
   min-height: 210px;
 }
+.day-card.locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(0.3);
+}
 
+.day-card.locked:hover {
+  transform: none;
+  box-shadow: var(--shadow);
+}
+
+.day-card.locked h3 {
+  color: var(--muted);
+}
 @media (max-width: 1100px) {
   .calendar-row {
     flex-wrap: wrap;
@@ -576,6 +594,7 @@
         id: '2024-04-28',
         shortTitle: 'Почему так сложно вливаться в работу после праздничных выходных?',
         title: 'Почему так сложно вливаться в работу после праздничных выходных?',
+        cardNote: '',
         theme: 'prep',
         teaser: '',
         intro: 'Потому что обычно мы к ним не готовимся - только очень ждем, чтобы скорее отложить дела. А по возвращении сталкиваемся с интенсивным стрессом. Делимся чек-листом, с которым вам будет проще вернуться к работе после праздничных выходных. Позаботьтесь о себе сейчас, чтобы снизить стресс, когда вернетесь к работе.',
@@ -591,13 +610,13 @@
         id: '2024-04-29',
         shortTitle: 'Сложно отдохнуть, даже если для этого есть больше времени?',
         title: 'Сложно отдохнуть, даже если для этого есть больше времени?',
+        cardNote: 'Делимся рецептом идеального отдыха',
         theme: 'prep',
         teaser: 'Подборка практик и наблюдений о качественном отдыхе: что действительно восстанавливает, а что нет.',
         intro: [],
         bullets: [],
         content: `
           <p>Делимся рецептом идеального отдыха от Клодии Хэммонд, автора книги «Искусство отдыха». Возьмите всё от праздничных выходных!</p>
-
           <p><strong>Отдыхайте достаточно.</strong> Проверить «достаточность» можно с помощью вопросов:</p>
           <ul>
           <li>Хватило ли вам вчера времени на то, чтобы подзарядить свои батарейки физически и ментально?</li>
@@ -605,7 +624,6 @@
           <li>Была ли возможность подумать, а не просто сделать?</li>
           <li>Была ли возможность хотя бы ненадолго «отключиться»?</li>
           </ul>
-
           <p><strong>Добавьте занятия, которые помогают отдохнуть:</strong></p>
           <ul>
           <li>Передохнуть от общества других людей</li>
@@ -615,15 +633,10 @@
           <li>Разрешить себе повитать в облаках</li>
           <li>Разрешить себе некоторое время не стремиться к достижениям</li>
           </ul>
-
           <p><strong>Следите за отдыхом, которого вы не замечаете.</strong> Мы отдыхаем чаще, чем думаем, потому что не замечаем моменты отдыха. Отмечайте, что помогло восстановить силы, чтобы потом осознанно повторить это.</p>
-
           <p><strong>Пересмотрите отношение к свободному времени.</strong> Иногда мы не отдыхаем, потому что негативно относимся к «безделью». Попробуйте воспринимать отдых как перезагрузку.</p>
-
           <p><strong>Составьте анти-список дел.</strong> Уберите всё, что не помогает восстановлению и делается по инерции.</p>
-
           <p><strong>Выбирайте не самые быстрые варианты.</strong> В выходные можно позволить себе замедлиться и выбрать более приятный способ провести время.</p>
-
           <p><strong>Соберите «коробочку отдыха».</strong> Наполните её вещами, которые помогают успокоиться и восстановиться, и используйте в моменты перегрузки.</p>
           `,
         gallery: [{ src: './05.png' }]
@@ -632,9 +645,14 @@
         id: '2024-04-30',
         shortTitle: 'Было тяжело даже подумать об отдыхе? Были сложности со списком приятных активностей?',
         title: 'Было тяжело даже подумать об отдыхе? Были сложности со списком приятных активностей?',
+        cardNote: '',
         theme: 'prep',
         teaser: 'Короткий поддерживающий материал и мягкий переход к помощи специалиста.',
-        intro: 'Любые неприятные чувства, связанные с отдыхом можно обсудить с терапевтом. Напоминаем, что у вас есть доступ к <a href="https://yasno.live/" target="_blank" rel="noopener noreferrer">психологам сервиса Ясно</a> - с ними вы можете разобраться, что мешает вам качественно отдыхать.',
+        intro: `
+        <p>Любые неприятные чувства, связанные с отдыхом можно обсудить с терапевтом. Напоминаем, что у вас есть доступ к <a href="https://yasno.live/" target="_blank" rel="noopener noreferrer">психологам сервиса Ясно</a> - с ними вы можете разобраться, что мешает вам качественно отдыхать.</p>
+        <p>Действует промокод на корпоративную скидку 70%: <strong>CORP-IMP-5LE89X</strong></p>
+        <p>Подробнее о нашем партнерстве с Ясно читайте здесь: <a href="https://wiki.implecs.ru/x/DADYBw" target="_blank" rel="noopener noreferrer">https://wiki.implecs.ru/x/DADYBw</a></p>
+        `,
         bullets: [],
         gallery: [
           { src: './06.png' },
@@ -646,12 +664,15 @@
         shortTitle: 'Как перестать жить в ожидании: выходных, отпуска, конца рабочего дня? И начать просто жить?',
         title: 'Как перестать жить в ожидании: выходных, отпуска, конца рабочего дня? И начать просто жить?',
         theme: 'rest',
+        cardNote: '',
         teaser: 'Рефлексивный материал о том, как не проживать неделю в режиме «дотерпеть до пятницы».',
         intro: `
           <p>Ждать с нетерпением выходных - это нормально. Но если вся жизнь проходит в ожидании пятницы, а целые недели пролетают незамеченными?</p>
           <p>Попытались разобраться в карточках.</p>
-          <p>💙Компания хочет поддержать тех, кто уже готов начать исследовать себя в терапии. Вы можете применить корпоративный промокод и <a href="https://yasno.live/b2b-auth?utm_source=b2b&utm_medium=implecs&utm_campaign=maiskie&utm_content=4may" target="_blank" rel="noopener noreferrer">записаться на сессию</a>.</p>
-        `,
+          <p>💙Имплекс хочет поддержать тех, кто уже готов начать исследовать себя в терапии. Вы можете применить корпоративный промокод <strong>CORP-IMP-5LE89X</strong> и <a href="https://yasno.live/b2b-auth?utm_source=b2b&utm_medium=implecs&utm_campaign=maiskie&utm_content=4may" target="_blank" rel="noopener noreferrer">записаться на сессию</a> со скидкой 70%.</p>
+          <p>Подробнее о нашем партнерстве с Ясно читайте здесь: <a href="https://wiki.implecs.ru/x/DADYBw" target="_blank" rel="noopener noreferrer">https://wiki.implecs.ru/x/DADYBw</a></p>
+
+          `,
         bullets: [],
         gallery: [
           { src: './Жить в ожидании 1.png' },
@@ -667,11 +688,13 @@
         shortTitle: 'Заметили, что всегда с нетерпением ждёте выходных?',
         title: 'Заметили, что всегда с нетерпением ждёте выходных?',
         theme: 'rest',
+        cardNote: '',
         teaser: 'Диагностический материал о том, что может скрываться за постоянным ожиданием конца рабочей недели.',
         intro: `
           <p>Если при этом в будни у вас не получается уделять время важным для вас делам, или вы даже ненавидите всё, что происходит с понедельника по пятницу, - это повод обратиться к специалисту.</p>
           <p>Напоминаем, что у вас есть <a href="https://yasno.live/b2b-auth?utm_source=b2b&utm_medium=implecs&utm_campaign=maiskie&utm_content=5may" target="_blank" rel="noopener noreferrer">доступ к терапевтам сервиса Ясно</a> - вы можете обратиться к ним, чтобы лучше разобраться в своих чувствах.</p>
-          <p>Записаться можно по корпоративному промокоду - иногда даже одна встреча помогает по-новому посмотреть на ситуацию.</p>
+          <p>Записаться можно по корпоративному промокоду <strong>CORP-IMP-5LE89X</strong> со скидкой 70% - иногда даже одна встреча помогает по-новому посмотреть на ситуацию.</p>
+          <p>Подробнее о нашем партнерстве с Ясно читайте здесь: <a href="https://wiki.implecs.ru/x/DADYBw" target="_blank" rel="noopener noreferrer">https://wiki.implecs.ru/x/DADYBw</a></p>
         `,
         bullets: [],
         gallery: [{ src: './У меня есть две настройки.png' }]
@@ -681,11 +704,14 @@
         shortTitle: 'Воскресная тоска - Почему в последний день выходных мне тоскливо и даже тревожно?',
         title: 'Почему в последний день выходных мне тоскливо и тревожно?',
         theme: 'return',
+        cardNote: '',
         teaser: 'Что такое воскресная тоска и почему она может проявляться после длинных выходных или отпуска.',
         intro: `
           <p><strong>Почему в последний день выходных мне тоскливо и даже тревожно?</strong></p>
           <p>Воскресная тоска (её еще называют воскресный страх) может возникнуть не только в воскресенье, но и после отпуска или долгих выходных. Рассказали в карточках, что она может означать.</p>
           <p>Если такие состояния повторяются, это можно <a href="https://yasno.live/b2b-auth?utm_source=b2b&utm_medium=implecs&utm_campaign=maiskie&utm_content=12may" target="_blank" rel="noopener noreferrer">обсудить с психологом</a> и найти причины, которые за этим стоят.</p>
+          <p>Действует промокод на корпоративную скидку 70%: <strong>CORP-IMP-5LE89X</strong></p>
+          <p>Подробнее о нашем партнерстве с Ясно читайте здесь: <a href="https://wiki.implecs.ru/x/DADYBw" target="_blank" rel="noopener noreferrer">https://wiki.implecs.ru/x/DADYBw</a></p>
         `,
         bullets: [],
         gallery: [
@@ -697,13 +723,16 @@
         id: '2024-05-13',
         shortTitle: 'Чек-лист. Что (не) помогает войти в привычный ритм после праздников?',
         title: 'Чек-лист. Что (не) помогает войти в привычный ритм после праздников?',
+        cardNote: '',
         theme: 'return',
         teaser: 'Материал для самопроверки: полезные и неполезные способы адаптации после длинных выходных.',
         intro: `
           <p><strong>Что (не) помогает войти в привычный ритм после праздников</strong></p>
           <p>Проверьте себя с помощью чек-листа.</p>
           <p>Сохраните себе чек-лист и при необходимости возвращайтесь к нему - а если чувствуете, что адаптация дается сложно, это можно <a href="https://yasno.live/b2b-auth?utm_source=b2b&utm_medium=implecs&utm_campaign=maiskie&utm_content=13may" target="_blank" rel="noopener noreferrer">обсудить со специалистом</a>.</p>
-        `,
+          <p>Действует промокод на корпоративную скидку 70%: <strong>CORP-IMP-5LE89X</strong></p>
+          <p>Подробнее о нашем партнерстве с Ясно читайте здесь: <a href="https://wiki.implecs.ru/x/DADYBw" target="_blank" rel="noopener noreferrer">https://wiki.implecs.ru/x/DADYBw</a></p>
+          `,
           bullets: [],
         gallery: [
           { src: './Чек-лист рабочий режим 1.png' },
@@ -714,6 +743,7 @@
         id: '2024-05-14',
         shortTitle: 'Практические действия, которые помогут влиться в работу после праздничных выходных',
         title: 'Практические действия, которые помогут влиться в работу после выходных',
+        cardNote: '',
         theme: 'return',
         teaser: 'Набор конкретных действий для мягкого возвращения в рабочий режим.',
         intro: `
@@ -721,7 +751,9 @@
           <p>Собрали в карточках проверенные варианты, как вернуться в рабочий режим.</p>
           <p>Возвращайтесь к рекомендациям после отпуска и новогодних каникул - рекомендации универсальны.</p>
           <p>Если на последнем пункте заметили у себя тревогу и понимаете, что ваши установки могут мешать качественному восстановлению и работе после выходных, - <a href="https://yasno.live/b2b-auth?utm_source=b2b&utm_medium=implecs&utm_campaign=maiskie&utm_content=14may" target="_blank" rel="noopener noreferrer">обратитесь к психологу</a>. Вероятно, похожую тревогу вы испытывали в детстве, и с психологом вы можете найти её причины, чтобы во взрослом возрасте действовать по-другому и получать больше удовольствия от жизни.</p>
-        `,
+          <p>Действует промокод на корпоративную скидку 70%: <strong>CORP-IMP-5LE89X</strong></p>
+          <p>Подробнее о нашем партнерстве с Ясно читайте здесь: <a href="https://wiki.implecs.ru/x/DADYBw" target="_blank" rel="noopener noreferrer">https://wiki.implecs.ru/x/DADYBw</a></p>
+          `,
         bullets: [],
         gallery: [
           { src: './4 способа влиться в работу после праздничных выходных 1.png' },
@@ -733,13 +765,15 @@
         id: '2024-05-15',
         shortTitle: 'Дружеское напоминание: как проводить рабочие дни так, чтобы не приходилось ждать выходных и отпуска',
         title: 'Дружеское напоминание: как проводить рабочие дни так, чтобы не приходилось ждать отпуска',
+        cardNote: '',
         theme: 'return',
         teaser: 'Финальное мягкое напоминание о привычках, которые сохраняют ресурс в будни.',
         intro: `
-          <p>В ближайшее время нас не ждут долгие выходные, а до отпуска может быть далеко. Напоминаем о простых, но важных вещах, которые сохраняют ваш ресурс с понедельника по пятницу →</p>
+          <p>В ближайшее время нас не ждут долгие выходные, а до отпуска может быть далеко. Напоминаем о простых, но важных вещах, которые сохраняют ваш ресурс с понедельника по пятницу.</p>
           <p>Такие маленькие привычки помогут сохранить больше ресурса на личные дела.</p>
-          <p>Если хотите глубже разобраться в том, как выстраивать комфортный ритм жизни, это можно <a href="https://yasno.live/b2b-auth?utm_source=b2b&utm_medium=implecs&utm_campaign=maiskie&utm_content=15may" target="_blank" rel="noopener noreferrer">обсудить с психологом</a> - у вас есть доступ к <a href="https://yasno.live/b2b-auth?utm_source=b2b&utm_medium=implecs&utm_campaign=maiskie&utm_content=15may" target="_blank" rel="noopener noreferrer">сервису Ясно</a> по корпоративному промокоду.</p>
-        `,
+          <p>Если хотите глубже разобраться в том, как выстраивать комфортный ритм жизни, это можно <a href="https://yasno.live/b2b-auth?utm_source=b2b&utm_medium=implecs&utm_campaign=maiskie&utm_content=15may" target="_blank" rel="noopener noreferrer">обсудить с психологом</a> - у вас есть доступ к <a href="https://yasno.live/b2b-auth?utm_source=b2b&utm_medium=implecs&utm_campaign=maiskie&utm_content=15may" target="_blank" rel="noopener noreferrer">сервису Ясно</a> по корпоративному промокоду <strong>CORP-IMP-5LE89X</strong> со скидкой 70%.</p>
+          <p>Подробнее о нашем партнерстве с Ясно читайте здесь: <a href="https://wiki.implecs.ru/x/DADYBw" target="_blank" rel="noopener noreferrer">https://wiki.implecs.ru/x/DADYBw</a></p>
+          `,
         bullets: [],
         gallery: [
           { src: './Как_проводить_рабочие_дни_так,_чтобы_не_приходилось_ждать_выходных 1.png' },
@@ -750,6 +784,7 @@
       }
     ];
 
+    const unlockedCount = 10;
     const grid = document.getElementById('calendarGrid');
     const chips = document.querySelectorAll('.chip');
     const navLinks = document.querySelectorAll('.nav a[data-filter]');
@@ -777,15 +812,21 @@ function renderGrid() {
 
     return `
       <div class="calendar-row">
-        ${daysInRow.map(day => `
-          <article class="day-card" data-id="${day.id}">
+      ${daysInRow.map(day => {
+        const globalIndex = days.findIndex(item => item.id === day.id);
+        const isLocked = globalIndex >= unlockedCount;
+
+        return `
+          <article class="day-card ${isLocked ? 'locked' : ''}" data-id="${day.id}" data-locked="${isLocked}">
             <h3>${day.shortTitle}</h3>
+            <p class="card-note">${day.cardNote || ''}</p>
             <div class="day-footer">
               <span>${themeLabel(day.theme)}</span>
-              <span>Открыть →</span>
+              <span>${isLocked ? '🔒' : 'Открыть →'}</span>
             </div>
           </article>
-        `).join('')}
+        `;
+      }).join('')}
       </div>
     `;
   }
@@ -798,6 +839,7 @@ function renderGrid() {
 
   grid.querySelectorAll('.day-card').forEach(card => {
     card.addEventListener('click', () => {
+    if (card.dataset.locked === 'true') return;
       const id = card.dataset.id;
       const visible = getVisibleDays();
       const idx = visible.findIndex(item => item.id === id);
@@ -871,7 +913,13 @@ function renderGrid() {
     });
 
     nextDayButton.addEventListener('click', () => {
-      const visible = getVisibleDays();
+      const visible = getVisibleDays().filter(day => {
+        const globalIndex = days.findIndex(item => item.id === day.id);
+        return globalIndex < unlockedCount;
+      });
+
+      if (!visible.length) return;
+
       currentIndex = (currentIndex + 1) % visible.length;
       renderDay(visible[currentIndex]);
       document.getElementById('day-viewer').scrollIntoView({ behavior: 'smooth', block: 'start' });
