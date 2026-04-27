@@ -962,13 +962,12 @@ function renderGrid() {
   <script>
 fetch('https://script.google.com/macros/s/AKfycbxtyCh1VzQ2b__C5xnfIlsODz3qk9CN1btwtsTZ0EDbGPz18brOY3FwNlDLd9J9hw0rvw/exec', {
   method: 'POST',
+  mode: 'no-cors',
   body: JSON.stringify({
+    type: 'view',
     page: location.pathname,
     userAgent: navigator.userAgent
-  }),
-  headers: {
-    'Content-Type': 'application/json'
-  }
+  })
 });
 </script>
 </body>
