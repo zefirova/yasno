@@ -808,6 +808,7 @@ function trackEvent(payload) {
     mode: 'no-cors',
     body: JSON.stringify({
       ...payload,
+      userId: getUserId(),   // 👈 вот это ключевое
       page: location.pathname,
       userAgent: navigator.userAgent,
       timestamp: new Date().toISOString()
@@ -1003,6 +1004,16 @@ contentBlocks.appendChild(gallery);
 });
   </script>
 <script>
+  function getUserId() {
+  let id = localStorage.getItem('yasno_user_id');
+  
+  if (!id) {
+    id = 'u_' + Math.random().toString(36).slice(2) + Date.now();
+    localStorage.setItem('yasno_user_id', id);
+  }
+
+  return id;
+}
   trackEvent({
     type: 'view'
   });
