@@ -800,6 +800,20 @@
     ];
 
     const unlockedCount = 3;
+    const analyticsUrl = 'https://script.google.com/macros/s/AKfycbxtyCh1VzQ2b__C5xnfIlsODz3qk9CN1btwtsTZ0EDbGPz18brOY3FwNlDLd9J9hw0rvw/exec';
+
+function trackEvent(payload) {
+  fetch(analyticsUrl, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({
+      ...payload,
+      page: location.pathname,
+      userAgent: navigator.userAgent,
+      timestamp: new Date().toISOString()
+    })
+  });
+}
     const grid = document.getElementById('calendarGrid');
     const chips = document.querySelectorAll('.chip');
     const navLinks = document.querySelectorAll('.nav a[data-filter]');
@@ -856,9 +870,18 @@ function renderGrid() {
     card.addEventListener('click', () => {
     if (card.dataset.locked === 'true') return;
       const id = card.dataset.id;
-      const visible = getVisibleDays();
-      const idx = visible.findIndex(item => item.id === id);
-      renderDay(visible[idx]);
+const visible = getVisibleDays();
+const idx = visible.findIndex(item => item.id === id);
+const day = visible[idx];
+
+trackEvent({
+  type: 'open_card',
+  id: day.id,
+  title: day.title,
+  theme: day.theme
+});
+
+renderDay(day);
       currentIndex = idx;
       document.getElementById('day-viewer').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
@@ -887,16 +910,36 @@ function renderGrid() {
         contentBlocks.appendChild(el);
       });
 
-      const gallery = document.createElement('section');
-      gallery.className = 'gallery';
-      gallery.innerHTML = day.gallery.map(item => `
-        <figure>
-          <a href="${item.src}" target="_blank" rel="noopener noreferrer">
-            <img src="${item.src}" alt="" />
-          </a>
-        </figure>
-      `).join('');
-      contentBlocks.appendChild(gallery);
+const gallery = document.createElement('section');
+gallery.className = 'gallery';
+gallery.innerHTML = day.gallery.map((item, index) => `
+  <figure>
+    <a 
+      href="${item.src}" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      data-content-src="${item.src}"
+      data-content-index="${index + 1}"
+    >
+      <img src="${item.src}" alt="" />
+    </a>
+  </figure>
+`).join('');
+
+gallery.querySelectorAll('a[data-content-src]').forEach(link => {
+  link.addEventListener('click', () => {
+    trackEvent({
+      type: 'open_content',
+      id: day.id,
+      title: day.title,
+      theme: day.theme,
+      contentSrc: link.dataset.contentSrc,
+      contentIndex: link.dataset.contentIndex
+    });
+  });
+});
+
+contentBlocks.appendChild(gallery);
     }
 
     function themeLabel(theme) {
@@ -959,16 +1002,10 @@ function renderGrid() {
   });
 });
   </script>
-  <script>
-fetch('https://script.google.com/macros/s/AKfycbxtyCh1VzQ2b__C5xnfIlsODz3qk9CN1btwtsTZ0EDbGPz18brOY3FwNlDLd9J9hw0rvw/exec', {
-  method: 'POST',
-  mode: 'no-cors',
-  body: JSON.stringify({
-    type: 'view',
-    page: location.pathname,
-    userAgent: navigator.userAgent
-  })
-});
+<script>
+  trackEvent({
+    type: 'view'
+  });
 </script>
 </body>
 </html>
