@@ -988,12 +988,32 @@ contentBlocks.appendChild(gallery);
     renderDay(days[0]);
   document.addEventListener('click', (e) => {
   const el = e.target.closest('.promo');
-  if (!el) return;
+  document.addEventListener('click', (e) => {
+  const link = e.target.closest('a[href]');
+  if (!link) return;
+
+  // игнорируем внутренние якоря (#calendar и т.д.)
+  const href = link.getAttribute('href');
+  if (!href || href.startsWith('#')) return;
+
+  trackEvent({
+    type: 'link_click',
+    href: href,
+    text: link.textContent.trim()
+  });
+});
+    if (!el) return;
 
   const code = el.dataset.code;
 
-  navigator.clipboard.writeText(code).then(() => {
-    el.classList.add('copied');
+navigator.clipboard.writeText(code).then(() => {
+
+  trackEvent({
+    type: 'copy_promo',
+    code: code
+  });
+
+  el.classList.add('copied');
     el.textContent = 'Скопировано ✓';
 
     setTimeout(() => {
